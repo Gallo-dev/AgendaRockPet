@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">AgendaRockPet</string>
+    <string name="fab_add_cliente">Adiciona Novo Cliente</string>
+    <string name="nome_cliente">Nome do Cliente</string>
+    <string name="nome_animal">Nome do Animal</string>
+    <string name="telefone_cliente">Telefone</string>
+    <string name="email_cliente">e-mail</string>
+    <string name="observacao_cliente">Observação</string>
+    <string name="botao_salvar">Salvar"</string>
+</resources>
