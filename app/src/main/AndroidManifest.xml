@@ -2,18 +2,28 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+<!--    configuraaoo para acessar a camera do celular-->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+<!--    // permissao para acessar a galeria do celular-->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
     <application
+        android:name=".data.AppDataBase.PetApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/foto_cachorro"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/foto_cachorro"
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.AgendaPet"
         tools:targetApi="31">
         <activity
-            android:name=".ui.activity.SplashActivity"
+            android:name=".presentation.ListCliente.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,10 +32,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.FormularioClienteActivity"
+            android:name=".presentation.ListCliente.FormularioClienteActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.ListaClientesActivity"
+            android:name=".presentation.ListCliente.ListaClientesActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

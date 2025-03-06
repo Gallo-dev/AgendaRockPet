@@ -1,8 +1,12 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("org.jetbrains.kotlin.kapt")
+
+    // plugin parcelize para o android library
     id("kotlin-parcelize")
+
+    // id("com.google.devtools.ksp") alternativa para o kapt
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -11,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId = "br.com.gallodev.agendapet"
-        minSdk = 24
+        minSdk = 25
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -49,11 +53,31 @@ dependencies {
     // Dependencia para o recycler view não depender do material design
     implementation ("androidx.recyclerview:recyclerview:1.4.0")
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.material3.android)
+    implementation(libs.androidx.compose.material.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    // dependências do lottie animações
+    implementation("com.airbnb.android:lottie:6.3.0")
+
+    // Dependencia para adicionar imagem no app
     implementation("io.coil-kt:coil:2.7.0")
+
     // Dependencia para o CardView
     implementation ("androidx.cardview:cardview:1.0.0")
+
+    // Dependencia para criar Fragment
+    val fragment_version = "1.8.3"
+    implementation("androidx.fragment:fragment-ktx:$fragment_version")
+
+    // Dependencia para o Room
+    implementation("androidx.room:room-runtime:2.6.1")
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+
+    // Dependencia do LyafeCycle coroutine para o Room
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
 }

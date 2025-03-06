@@ -7,4 +7,10 @@
     <string name="email_cliente">e-mail</string>
     <string name="observacao_cliente">Observação</string>
     <string name="botao_salvar">Salvar"</string>
+    <string name="data">Data (dd/mm/aaaa)"</string>
+    <string name="hora">Hora (hh:mm)"</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_data_fragment">Hello data fragment</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

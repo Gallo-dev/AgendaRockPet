@@ -2,8 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="blueAgendaPet">#150E51</color>
-    <color name="blueAgendaPetDark">#150E51</color>
+    <color name="blueAgendaPet">#1D0F4E</color>
     <color name="onPrimary">#FFFFFF</color>
     <color name="secondary">#000000</color>
     <color name="onSecondary">#FFFFFF</color>

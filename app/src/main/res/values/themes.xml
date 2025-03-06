@@ -9,7 +9,25 @@
         <item name="colorSecondary">#000000</item>
         <item name="colorOnSecondary">#FFFFFF</item>
 
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:datePickerStyle">@style/DataPickerFragment</item>
+        <item name="android:timePickerStyle">@style/HoraPickerFragment</item>
+    </style>
+
+    <style name="DataPickerFragment" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+
+        <item name="android:datePickerMode">calendar</item>
+        <item name="android:headerBackground">@color/blueAgendaPet</item>
+        <item name="android:calendarTextColor">@color/black</item>
+
+    </style>
+    <style name="HoraPickerFragment" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+
+        <item name="android:timePickerMode">clock</item>
+        <item name="android:headerBackground">@color/blueAgendaPet</item>
+        <item name="android:numbersSelectorColor">@color/blueAgendaPet</item>
+        <item name="android:numbersInnerTextColor">@color/white</item>
+        <item name="android:numbersTextColor">@color/black</item>
+
     </style>
 
 
