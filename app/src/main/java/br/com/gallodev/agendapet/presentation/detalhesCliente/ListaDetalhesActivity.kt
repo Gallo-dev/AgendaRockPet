@@ -1,19 +1,13 @@
-package br.com.gallodev.agendapet.presentation.ListCliente
+package br.com.gallodev.agendapet.presentation.detalhesCliente
 
-import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
-import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import br.com.gallodev.agendapet.R
 import br.com.gallodev.agendapet.data.AppDataBase.PetApplication
-import br.com.gallodev.agendapet.data.model.Cliente
 import br.com.gallodev.agendapet.databinding.ActivityListaDetalhesBinding
 import java.io.File
 

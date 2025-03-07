@@ -1,4 +1,4 @@
-package br.com.gallodev.agendapet.presentation.ListCliente
+package br.com.gallodev.agendapet.presentation.formularioCliente
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -23,6 +23,11 @@ import br.com.gallodev.agendapet.data.AppDataBase.AppDatabase
 import br.com.gallodev.agendapet.data.AppDataBase.ClienteDao
 import br.com.gallodev.agendapet.data.model.Cliente
 import br.com.gallodev.agendapet.databinding.ActivityFormularioClienteBinding
+import br.com.gallodev.agendapet.presentation.ListCliente.DataPickerFragment
+import br.com.gallodev.agendapet.presentation.ListCliente.HoraPickerFragment
+import br.com.gallodev.agendapet.utils.aplicaMascaraData
+import br.com.gallodev.agendapet.utils.aplicaMascaraHora
+import br.com.gallodev.agendapet.utils.aplicaMascaraTel
 import br.com.gallodev.agendapet.utils.formataTelefone
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,7 +47,6 @@ class FormularioClienteActivity : AppCompatActivity() {
     private var imagemPerfilPath: String? = null // Variável para armazenar o caminho da imagem do perfil
 
     companion object {
-        private const val CAMERA_PERMISSION_REQUEST_CODE = 100
         private const val GALERIA_PERMISSION_REQUEST_CODE = 101
     }
 
@@ -63,14 +67,19 @@ class FormularioClienteActivity : AppCompatActivity() {
             showTimePickerDialog()
         }
 
-        title = "Dados do Cliente"
+        binding.telefoneClienteFormulario.aplicaMascaraTel()
+        binding.dataAtendimentoFormulario.aplicaMascaraData()
+        binding.horaAtendimentoFormulario.aplicaMascaraHora()
 
+        aplicaTitulo()
         configuraBotaoSalvar()
         configCameraLauncher()
         configGaleriaLauncher()
         editarFotoFerfil()
+    }
 
-
+    fun aplicaTitulo(){
+        title = "Dados do Cliente"
     }
 
     // Método para exibir o DatePickerDialog
@@ -193,13 +202,40 @@ class FormularioClienteActivity : AppCompatActivity() {
         val botaoSalvar = binding.botaoSalvarFormulario
         botaoSalvar.setOnClickListener {
             val nomeTutor = binding.nomeClienteFormulario.text.toString().trim()
-            if (!nomeTutor.matches(Regex("^[a-zA-ZÀ-ÿ ]+\$"))) {
+            if (nomeTutor.isEmpty()) {
+                binding.nomeClienteFormulario.error = "Campo Obrigatório!"
+                return@setOnClickListener
+            } else if (!nomeTutor.matches(Regex("^[a-zA-ZÀ-ÿ ]+\$"))) {
                 binding.nomeClienteFormulario.error = "Digite apenas letras e espaços"
                 return@setOnClickListener
             }
             val nomeAnimal = binding.nomeAnimalFormulario.text.toString().trim()
+            if (nomeAnimal.isEmpty()) {
+                binding.nomeAnimalFormulario.error = "Campo Obrigatório!"
+                return@setOnClickListener
+            } else
             if (!nomeAnimal.matches(Regex("^[a-zA-ZÀ-ÿ ]+\$"))) {
                 binding.nomeAnimalFormulario.error = "Digite apenas letras e espaços"
+                return@setOnClickListener
+            }
+            val data = binding.dataAtendimentoFormulario.text.toString().trim()
+            if (data.isEmpty()) {
+                binding.dataAtendimentoFormulario.error = "Campo Obrigatório!"
+                return@setOnClickListener
+            }
+            val hora = binding.horaAtendimentoFormulario.text.toString().trim()
+            if (hora.isEmpty()) {
+                binding.nomeAnimalFormulario.error = "Campo Obrigatório!"
+                return@setOnClickListener
+            }
+            val tel = binding.telefoneClienteFormulario.text.toString().trim()
+            if (tel.isEmpty()) {
+                binding.telefoneClienteFormulario.error = "Campo Obrigatório!"
+                return@setOnClickListener
+            }
+            val email = binding.emailClienteFormulario.text.toString().trim()
+            if (email.isEmpty()) {
+                binding.emailClienteFormulario.error = "Campo Obrigatório!"
                 return@setOnClickListener
             }
 
@@ -219,6 +255,7 @@ class FormularioClienteActivity : AppCompatActivity() {
 
         val campoNomeAnimal = binding.nomeAnimalFormulario.text
         val nomeAnimal = campoNomeAnimal.toString()
+
 
         val telefoneTutor = binding.telefoneClienteFormulario.text.toString()
             .formataTelefone()

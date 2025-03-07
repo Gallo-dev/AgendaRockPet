@@ -7,8 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.gallodev.agendapet.data.AppDataBase.PetApplication
-import br.com.gallodev.agendapet.data.model.Cliente
 import br.com.gallodev.agendapet.databinding.ActivityListaClienteBinding
+import br.com.gallodev.agendapet.presentation.detalhesCliente.ListaDetalhesActivity
+import br.com.gallodev.agendapet.presentation.formularioCliente.FormularioClienteActivity
 import kotlinx.coroutines.launch
 
 class ListaClientesActivity : AppCompatActivity() {

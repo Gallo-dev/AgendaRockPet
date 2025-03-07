@@ -21,7 +21,13 @@
         android:theme="@style/Base.Theme.AgendaPet"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.ListCliente.ListaDetalhesActivity"
+            android:name=".presentation.Login.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.agendamentos.AgendamentoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.detalhesCliente.ListaDetalhesActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.splashScreen.SplashActivity"
@@ -33,7 +39,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.ListCliente.FormularioClienteActivity"
+            android:name=".presentation.formularioCliente.FormularioClienteActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.ListCliente.ListaClientesActivity"

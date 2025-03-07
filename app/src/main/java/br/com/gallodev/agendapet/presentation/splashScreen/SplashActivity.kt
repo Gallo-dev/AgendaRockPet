@@ -6,6 +6,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import br.com.gallodev.agendapet.databinding.ActivitySplashBinding
 import br.com.gallodev.agendapet.presentation.ListCliente.ListaClientesActivity
+import br.com.gallodev.agendapet.presentation.Login.LoginActivity
 
 class SplashActivity : AppCompatActivity() {
 
@@ -22,7 +23,7 @@ class SplashActivity : AppCompatActivity() {
     }
     private fun setupAction(){
         binding.animationView.postDelayed({
-            val intent = Intent(this, ListaClientesActivity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
         },4000)

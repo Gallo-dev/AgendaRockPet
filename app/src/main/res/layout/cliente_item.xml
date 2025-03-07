@@ -175,7 +175,7 @@
             android:textSize="10sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/imagem_item_animal"
-            app:layout_constraintTop_toBottomOf="@id/telefone_cliente_formulario" />
+            app:layout_constraintTop_toBottomOf="@id/imagem_item_animal" />
 
         <TextView
             android:id="@+id/email_cliente_formulario"
@@ -196,7 +196,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:fontFamily="@font/roboto_medium"
-            android:text="Observação:"
+            android:text="@string/observacao_cliente"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="10sp"

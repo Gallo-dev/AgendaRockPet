@@ -1,4 +1,4 @@
-package br.com.gallodev.agendapet.presentation.ListCliente
+package br.com.gallodev.agendapet.presentation.detalhesCliente
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
