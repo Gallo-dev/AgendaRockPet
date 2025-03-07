@@ -1,4 +1,4 @@
-package br.com.gallodev.agendapet.presentation.extension
+package br.com.gallodev.agendapet.utils
 
 fun String.formataTelefone():String {
     val numero = this.replace(Regex("[^0-9]"), "")

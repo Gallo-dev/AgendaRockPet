@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
-<!--    configuraaoo para acessar a camera do celular-->
+    <!-- configuraaoo para acessar a camera do celular -->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
-    <uses-permission android:name="android.permission.CAMERA" />
 
-<!--    // permissao para acessar a galeria do celular-->
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- // permissao para acessar a galeria do celular -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
@@ -23,7 +21,10 @@
         android:theme="@style/Base.Theme.AgendaPet"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.ListCliente.SplashActivity"
+            android:name=".presentation.ListCliente.ListaDetalhesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.splashScreen.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

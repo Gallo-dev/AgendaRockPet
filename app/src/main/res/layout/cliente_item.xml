@@ -37,7 +37,7 @@
             android:layout_marginTop="8dp"
             android:textStyle="bold"
             android:fontFamily="@font/roboto_medium"
-            android:text="Nomeo do tutor:"
+            android:text="@string/nome_cliente"
             android:textColor="@color/black"
             android:textSize="10sp"
             app:layout_constraintStart_toEndOf="@id/imagem_item_animal"

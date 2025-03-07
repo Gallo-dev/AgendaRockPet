@@ -1,13 +1,11 @@
-package br.com.gallodev.agendapet.presentation.ListCliente
+package br.com.gallodev.agendapet.presentation.splashScreen
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import br.com.gallodev.agendapet.R
 import br.com.gallodev.agendapet.databinding.ActivitySplashBinding
+import br.com.gallodev.agendapet.presentation.ListCliente.ListaClientesActivity
 
 class SplashActivity : AppCompatActivity() {
 

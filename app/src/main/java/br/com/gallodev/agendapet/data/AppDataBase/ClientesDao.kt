@@ -22,4 +22,7 @@ interface ClienteDao {
     @Query ("SELECT * FROM clientes")
     fun getAllClientes(): Flow<List<Cliente>>
 
+    @Query("SELECT * FROM clientes WHERE id = :id")
+    fun getClienteById(id: Int): Flow<Cliente> // Retorna um Flow para observação contínua
+
 }

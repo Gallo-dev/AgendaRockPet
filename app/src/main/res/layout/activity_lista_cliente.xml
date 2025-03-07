@@ -12,6 +12,8 @@
     android:layout_height="wrap_content"
     tools:context=".MainActivity">
 
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/lista_clientes_recyclerView"
         android:layout_width="0dp"
@@ -23,6 +25,23 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/cliente_item"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+    <TextView
+        android:id="@+id/texto_lista_vazia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="@color/blueAgendaPet"
+        android:text="LISTA DE CLIENTES VAZIA"
+        android:gravity="center"
+        android:visibility="gone"/>
+
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_cliente"
@@ -36,7 +55,6 @@
         android:elevation="@dimen/cardview_compat_inset_shadow"
         app:rippleColor="@color/black"
         android:contentDescription="@string/fab_add_cliente"/>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

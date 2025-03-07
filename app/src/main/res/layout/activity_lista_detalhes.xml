@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/cinza_claro"
+        tools:context=".presentation.ListCliente.ListaDetalhesActivity">
+
+        <ImageView
+            android:id="@+id/imagem_perfil_cliente_detalhe"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_margin="16dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:src="@drawable/ic_launcher_foreground" />
+
+        <TextView
+            android:id="@+id/nome_cliente_titulo_detalhe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/nome_cliente"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imagem_perfil_cliente_detalhe" />
+
+        <TextView
+            android:id="@+id/nome_cliente_detalhe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/nome_cliente_titulo_detalhe"
+            app:layout_constraintTop_toBottomOf="@id/nome_cliente_titulo_detalhe"
+            tools:text="@string/nome_cliente" />
+
+        <TextView
+            android:id="@+id/nome_animal_titulo_detalhe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nome_animal"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/nome_cliente_titulo_detalhe"
+            app:layout_constraintTop_toTopOf="@id/nome_cliente_titulo_detalhe" />
+
+        <TextView
+            android:id="@+id/nome_animal_detalhe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/nome_animal_titulo_detalhe"
+            app:layout_constraintTop_toBottomOf="@id/nome_animal_titulo_detalhe"
+            tools:text="@string/nome_animal" />
+
+        <TextView
+            android:id="@+id/data_atendimento_titulo_detalhe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/data"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/nome_cliente_titulo_detalhe"
+            app:layout_constraintTop_toBottomOf="@id/nome_cliente_detalhe" />
+
+        <TextView
+            android:id="@+id/data_atendimento_detalhe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/nome_cliente_titulo_detalhe"
+            app:layout_constraintTop_toBottomOf="@id/data_atendimento_titulo_detalhe"
+            tools:text="@string/data" />
+
+        <TextView
+            android:id="@+id/hora_atendimento_titulo_detalhe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/hora"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/data_atendimento_detalhe" />
+
+        <TextView
+            android:id="@+id/hora_atendimento_detalhe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hora_atendimento_titulo_detalhe"
+            tools:text="@string/hora" />
+
+        <TextView
+            android:id="@+id/telefone_cliente_titulo_detalhe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/telefone_cliente"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hora_atendimento_detalhe" />
+
+        <TextView
+            android:id="@+id/telefone_cliente_detalhe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/telefone_cliente_titulo_detalhe"
+            tools:text="@string/telefone_cliente" />
+
+        <TextView
+            android:id="@+id/email_cliente_titulo_detalhe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/email_cliente"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/telefone_cliente_detalhe" />
+
+        <TextView
+            android:id="@+id/email_cliente_detalhe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/email_cliente_titulo_detalhe"
+            tools:text="@string/email_cliente" />
+
+        <TextView
+            android:id="@+id/observacao_cliente_titulo_detalhe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/observacao_cliente"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/email_cliente_detalhe" />
+
+        <TextView
+            android:id="@+id/observacao_cliente_detalhe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/observacao_cliente_titulo_detalhe"
+            tools:text="@string/observacao_cliente" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

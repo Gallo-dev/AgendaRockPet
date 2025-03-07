@@ -7,21 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.compose.ui.semantics.text
+import androidx.appcompat.widget.SearchView.OnCloseListener
 import androidx.recyclerview.widget.RecyclerView
 import br.com.gallodev.agendapet.R
 import br.com.gallodev.agendapet.data.model.Cliente
 import java.io.File
-import kotlin.io.path.exists
 
-class ClienteAdapter(
+class ListaClienteAdapter(
 
-    private var clientes: List<Cliente>
+    private var clientes: List<Cliente>,
+    private val onItemClick: (Cliente) -> Unit // Callback para o onClick
 
-) : RecyclerView.Adapter<ClienteAdapter.ClienteViewHolder>() {
+) : RecyclerView.Adapter<ListaClienteAdapter.ClienteViewHolder>() {
+
 
     class ClienteViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
         private val imagemPerfilCliente: ImageView = itemView.findViewById(R.id.imagem_item_animal)
         private val nomeCliente: TextView = itemView.findViewById(R.id.nome_cliente_formulario)
         private val nomeAnimal: TextView = itemView.findViewById(R.id.nome_animal_formulario)
@@ -33,8 +33,7 @@ class ClienteAdapter(
         private val observacaoCliente: TextView =
             itemView.findViewById(R.id.observacao_cliente_formulario)
 
-        fun vincula(cliente: Cliente) {
-            Log.i("ClienteAdapter", "vincula chamado")
+        fun vincula(cliente: Cliente, onItemClick: (Cliente) -> Unit) {
             // Vincula os dados do cliente com a view
             nomeCliente.text = cliente.nomeTutor
             nomeAnimal.text = cliente.nomeAnimal
@@ -45,8 +44,11 @@ class ClienteAdapter(
             observacaoCliente.text = cliente.observacaoAnimal
 
             carregaImagem(cliente.imagemPerfil, imagemPerfilCliente)
-        }
 
+            itemView.setOnClickListener {
+                onItemClick(cliente)
+            }
+        }
         private fun carregaImagem(caminhoImagem: String?, imageView: ImageView) {
             if (!caminhoImagem.isNullOrEmpty()) {
                 val arquivo = File(caminhoImagem)
@@ -66,7 +68,6 @@ class ClienteAdapter(
 
     // Responsavel por criar a view
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClienteViewHolder {
-        Log.i("ClienteAdapter", "onCreateViewHolder chamado")
         val inflater = LayoutInflater.from(parent.context).inflate(R.layout.cliente_item, parent, false)
         return ClienteViewHolder(inflater)
     }
@@ -78,7 +79,7 @@ class ClienteAdapter(
     override fun onBindViewHolder(holder: ClienteViewHolder, position: Int) {
         Log.i("ClienteAdapter", "onBindViewHolder chamado")
         val cliente = clientes[position]
-        holder.vincula(cliente)
+        holder.vincula(cliente, onItemClick)
     }
 
     fun atualizaClientes(clientes: List<Cliente>) {

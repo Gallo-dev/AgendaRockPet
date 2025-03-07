@@ -23,7 +23,7 @@ import br.com.gallodev.agendapet.data.AppDataBase.AppDatabase
 import br.com.gallodev.agendapet.data.AppDataBase.ClienteDao
 import br.com.gallodev.agendapet.data.model.Cliente
 import br.com.gallodev.agendapet.databinding.ActivityFormularioClienteBinding
-import br.com.gallodev.agendapet.presentation.extension.formataTelefone
+import br.com.gallodev.agendapet.utils.formataTelefone
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -90,7 +90,7 @@ class FormularioClienteActivity : AppCompatActivity() {
     }
 
     private fun editarFotoFerfil() {
-        val botaoEditarFoto = binding.icCameraEdit
+        val botaoEditarFoto = binding.imagemPerfil
         botaoEditarFoto.setOnClickListener {
             escolherFoto()
         }
@@ -129,7 +129,7 @@ class FormularioClienteActivity : AppCompatActivity() {
             }
         }
     }
-
+    // Método para escolher a foto
     private fun escolherFoto() {
         val opcoes = arrayOf("Camera", "Galeria")
         val builder = AlertDialog.Builder(this)
@@ -143,7 +143,7 @@ class FormularioClienteActivity : AppCompatActivity() {
         builder.show()
     }
 
-
+    // Método para tirar uma foto
     @SuppressLint("QueryPermissionsNeeded")
     fun tirarFoto() {
         // Lógica para tirar uma foto
@@ -154,7 +154,7 @@ class FormularioClienteActivity : AppCompatActivity() {
             Log.e("FormularioClienteActivity", "Erro ao abrir a câmera")
         }
     }
-
+    // Método para escolher uma imagem da galeria
     fun escolherDaGaleria() {
         // Lógica para escolher uma imagem da galeria
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -165,41 +165,44 @@ class FormularioClienteActivity : AppCompatActivity() {
         }
     }
 
+    // Método para mostrar a foto
     private fun mostrarFoto(bitmap: Bitmap) {
         val fotoPerfil = findViewById<ImageView>(R.id.imagem_perfil)
         fotoPerfil.setImageBitmap(bitmap)
         imagemPerfilBitmap = bitmap // Atualiza a imagem do perfil
     }
 
+    // Método para converter a URI da imagem para Bitmap
     private fun uriParaBitmap(selectedFileURI: Uri): Bitmap? {
         return try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 val source = ImageDecoder.createSource(contentResolver, selectedFileURI)
                 val bitmap = ImageDecoder.decodeBitmap(source)
-                Log.d(
-                    "FormularioClienteActivity",
-                    "uriToBitmap: Bitmap decodificado com sucesso (API >= 28)"
-                )
                 bitmap
             } else {
                 val bitmap =
                     MediaStore.Images.Media.getBitmap(this.contentResolver, selectedFileURI)
-                Log.d(
-                    "FormularioClienteActivity",
-                    "uriToBitmap: Bitmap decodificado com sucesso (API < 28)"
-                )
                 bitmap
             }
         } catch (e: Exception) {
-            Log.e("FormularioClienteActivity", "Erro ao converter")
             Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
         }
     }
 
-
     private fun configuraBotaoSalvar() {
         val botaoSalvar = binding.botaoSalvarFormulario
         botaoSalvar.setOnClickListener {
+            val nomeTutor = binding.nomeClienteFormulario.text.toString().trim()
+            if (!nomeTutor.matches(Regex("^[a-zA-ZÀ-ÿ ]+\$"))) {
+                binding.nomeClienteFormulario.error = "Digite apenas letras e espaços"
+                return@setOnClickListener
+            }
+            val nomeAnimal = binding.nomeAnimalFormulario.text.toString().trim()
+            if (!nomeAnimal.matches(Regex("^[a-zA-ZÀ-ÿ ]+\$"))) {
+                binding.nomeAnimalFormulario.error = "Digite apenas letras e espaços"
+                return@setOnClickListener
+            }
+
             val clienteNovo = criaCliente()
             lifecycleScope.launch(Dispatchers.IO) {
                 clienteDao.insert(cliente = clienteNovo)
@@ -209,6 +212,8 @@ class FormularioClienteActivity : AppCompatActivity() {
     }
 
     private fun criaCliente(): Cliente {
+
+
         val campoNomeTutor = binding.nomeClienteFormulario.text
         val nomeTuotor = campoNomeTutor.toString()
 
@@ -231,7 +236,6 @@ class FormularioClienteActivity : AppCompatActivity() {
         val horaAtendimento = campoHora.toString()
 
        imagemPerfilPath = imagemPerfilBitmap?.let { salvarImagem(it) }
-        Log.i("FormularioClienteActivity", "Caminho da imagem do perfil: $imagemPerfilPath")
 
         return Cliente(
             nomeTutor = nomeTuotor,
@@ -244,7 +248,7 @@ class FormularioClienteActivity : AppCompatActivity() {
             imagemPerfil = imagemPerfilPath
         )
     }
-
+    // Método para salvar a imagem
     private fun salvarImagem(bitmap: Bitmap): String {
         val nomeArquivo = "imagem_perfil_${System.currentTimeMillis()}.jpg" // Nome do arquivo da imagem
         val arquivo = File(filesDir, nomeArquivo) // Caminho do arquivo da imagem
@@ -260,14 +264,13 @@ class FormularioClienteActivity : AppCompatActivity() {
         }
     }
 
-
+    // Método para verificar se a permissão foi concedida
     override fun onRequestPermissionsResult( // Sobrescreve o método onRequestPermissionsResult
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray // Array de resultados de permissões
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults) // Chamar o método da superclasse
-        Log.i("FormularioClienteActivity", "onRequestPermissionsResult chamado")
         viewModel.onRequestPermissionsResult(requestCode, grantResults, this)
     }
 }
