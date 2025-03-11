@@ -36,11 +36,8 @@ class ListaClienteAdapter(
             // Vincula os dados do cliente com a view
             nomeCliente.text = cliente.nomeTutor
             nomeAnimal.text = cliente.nomeAnimal
-            dataAtendimento.text = cliente.dataAtendimento
-            horaAtendimento.text = cliente.horaAtendimento
             telefoneCliente.text = cliente.telefoneTutor
             emailCliente.text = cliente.emailTutor
-            observacaoCliente.text = cliente.observacaoAnimal
 
             carregaImagem(cliente.imagemPerfil, imagemPerfilCliente)
 

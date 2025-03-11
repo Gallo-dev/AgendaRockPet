@@ -38,11 +38,8 @@ class ListaDetalhesActivity : AppCompatActivity() {
                 binding.imagemPerfilClienteDetalhe.let { carregaImagem(cliente.imagemPerfil, it) }
                 binding.nomeClienteDetalhe.text = cliente.nomeTutor
                 binding.nomeAnimalDetalhe.text = cliente.nomeAnimal
-                binding.dataAtendimentoDetalhe.text = cliente.dataAtendimento
-                binding.horaAtendimentoDetalhe.text = cliente.horaAtendimento
                 binding.telefoneClienteDetalhe.text = cliente.telefoneTutor
                 binding.emailClienteDetalhe.text = cliente.emailTutor
-                binding.observacaoClienteDetalhe.text = cliente.observacaoAnimal
             }
         }
     }

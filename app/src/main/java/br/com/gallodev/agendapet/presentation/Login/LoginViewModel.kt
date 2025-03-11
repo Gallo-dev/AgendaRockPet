@@ -3,8 +3,7 @@ package br.com.gallodev.agendapet.presentation.Login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import br.com.gallodev.agendapet.data.AppDataBase.ClienteDao
-import br.com.gallodev.agendapet.data.model.Cliente
+import androidx.lifecycle.ViewModelProvider
 import br.com.gallodev.agendapet.data.repository.Authentication
 
 class LoginViewModel(private val authentication: Authentication) : ViewModel() {
@@ -20,5 +19,16 @@ class LoginViewModel(private val authentication: Authentication) : ViewModel() {
                 _loginResult.postValue(Result.failure(Exception(errorMessage)))
             }
         }
+    }
+}
+
+class LoginViewModelFactory(private val authentication: Authentication) :
+    ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if(modelClass.isAssignableFrom(LoginViewModel::class.java)){
+            @Suppress("UNCHECKED_CAST")
+            return LoginViewModel(authentication) as T
+        }
+        throw  IllegalArgumentException("Unknown ViewModel class")
     }
 }

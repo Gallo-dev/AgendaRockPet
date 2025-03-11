@@ -1,15 +1,18 @@
 package br.com.gallodev.agendapet.presentation.Login
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import br.com.gallodev.agendapet.R
+import br.com.gallodev.agendapet.data.repository.Authentication
 import br.com.gallodev.agendapet.databinding.ActivityLoginBinding
 import br.com.gallodev.agendapet.presentation.ListCliente.ListaClientesActivity
 import br.com.gallodev.agendapet.presentation.formularioCliente.FormularioClienteActivity
@@ -20,7 +23,8 @@ import kotlinx.coroutines.launch
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var viewModel: LoginViewModel
+    private val authentication by lazy { Authentication() }
+    private val viewModel: LoginViewModel by viewModels {LoginViewModelFactory(authentication) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,14 +33,13 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.hide()
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this,ViewModelFactory())[LoginViewModel::class.java]
 
-        val emailEditText = binding.emailLogin.text.toString()
-        val senhaEditText = binding.senhaLogin.text.toString()
-        val loginButton = binding.botaoEntrar
+//        val emailEditText = binding.emailLogin.text.toString()
+//        val senhaEditText = binding.senhaLogin.text.toString()
+//        val loginButton = binding.botaoEntrar
 
         vaiParaCadastro()
-        botaoSalvarLogin()
+        botaoEntrar()
     }
     private fun vaiParaCadastro(){
         binding.cadastreSe.setOnClickListener {
@@ -45,7 +48,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun botaoSalvarLogin(){
+    private fun botaoEntrar(){
         binding.botaoEntrar.setOnClickListener {
             val emailLogin = binding.emailLogin.text.toString().trim()
             if (emailLogin.isEmpty()) {
@@ -58,6 +61,8 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
                 viewModel.login(emailLogin, senhaLogin)
             }
+
+            viewModel.login(emailLogin, senhaLogin)
 
             viewModel.loginResult.observe(this) { result ->
                 result.onSuccess {

@@ -11,7 +11,7 @@ pluginManagement {
         gradlePluginPortal()
     }
     plugins {
-        id("com.google.devtools.ksp") version "1.9.22-1.0.17" // Usa a versão específica do KSP
+        id("com.google.devtools.ksp") version "2.1.0-1.0.29" // Usa a versão específica do KSP
     }
 }
 dependencyResolutionManagement {

@@ -4,10 +4,11 @@ import br.com.gallodev.agendapet.data.model.Cliente
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class Authentication(private val firevaseAuth: FirebaseAuth) {
+class Authentication {
+    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
     fun login(email: String, password: String, calback: (Boolean, String?) -> Unit) {
-        firevaseAuth.signInWithEmailAndPassword(email, password)
+        firebaseAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     calback(true, null)
@@ -23,11 +24,11 @@ class Authentication(private val firevaseAuth: FirebaseAuth) {
         cliente: Cliente,
         calback: (Boolean, String?) -> Unit
     ) {
-        firevaseAuth.createUserWithEmailAndPassword(email, password)
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     // obtein o id do usuario e retorna uma string vazia se for nulo
-                    val uid = firevaseAuth.currentUser?.uid?: ""
+                    val uid = firebaseAuth.currentUser?.uid?: ""
                     // obtein a instância do Firestore e salve os dados do cliente
                     val db = FirebaseFirestore.getInstance()
                     db.collection("clientes").document(uid).set(cliente)
