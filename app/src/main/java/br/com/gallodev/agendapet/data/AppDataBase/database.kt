@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import br.com.gallodev.agendapet.data.model.Cliente
 
-@Database(entities = [Cliente::class], version = 1, exportSchema = false)
+@Database(entities = [Cliente::class], version = 2, exportSchema = false)
 abstract class  AppDatabase : RoomDatabase() {
     abstract fun clienteDao(): ClienteDao
 

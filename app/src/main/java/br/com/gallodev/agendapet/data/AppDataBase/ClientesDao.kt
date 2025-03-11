@@ -25,4 +25,7 @@ interface ClienteDao {
     @Query("SELECT * FROM clientes WHERE id = :id")
     fun getClienteById(id: Int): Flow<Cliente> // Retorna um Flow para observação contínua
 
+//    @Query("SELECT * FROM clientes WHERE emailTutor = :email AND senha = :senha")
+//    fun verificaCredenciais(email: String, senha: String): Cliente?
+
 }

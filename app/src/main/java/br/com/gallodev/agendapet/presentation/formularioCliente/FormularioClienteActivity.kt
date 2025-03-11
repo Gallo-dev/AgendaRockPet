@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -38,13 +39,14 @@ import java.io.FileOutputStream
 class FormularioClienteActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFormularioClienteBinding
-    private lateinit var clienteDao: ClienteDao
+//    private lateinit var clienteDao: ClienteDao
 
     private lateinit var cameraLauncher: ActivityResultLauncher<Intent>
     private lateinit var galeriaLauncher: ActivityResultLauncher<PickVisualMediaRequest>
     private lateinit var viewModel: FormularioViewModel
     private var imagemPerfilBitmap: Bitmap? = null // Variável para armazenar a imagem do perfil
-    private var imagemPerfilPath: String? = null // Variável para armazenar o caminho da imagem do perfil
+    private var imagemPerfilPath: String? =
+        null // Variável para armazenar o caminho da imagem do perfil
 
     companion object {
         private const val GALERIA_PERMISSION_REQUEST_CODE = 101
@@ -56,47 +58,60 @@ class FormularioClienteActivity : AppCompatActivity() {
         binding = ActivityFormularioClienteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        clienteDao = AppDatabase.getDatabase(this).clienteDao()
+        //clienteDao = AppDatabase.getDatabase(this).clienteDao()
 
         viewModel = ViewModelProvider(this)[FormularioViewModel::class.java]
 
-        binding.dataAtendimentoFormulario.setOnClickListener {
-            showDatePickerDialog()
-        }
-        binding.horaAtendimentoFormulario.setOnClickListener {
-            showTimePickerDialog()
-        }
+//        binding.dataAtendimentoFormulario.setOnClickListener {
+//            showDatePickerDialog()
+//        }
+//        binding.horaAtendimentoFormulario.setOnClickListener {
+//            showTimePickerDialog()
+//        }
 
         binding.telefoneClienteFormulario.aplicaMascaraTel()
-        binding.dataAtendimentoFormulario.aplicaMascaraData()
-        binding.horaAtendimentoFormulario.aplicaMascaraHora()
+//        binding.dataAtendimentoFormulario.aplicaMascaraData()
+//        binding.horaAtendimentoFormulario.aplicaMascaraHora()
 
         aplicaTitulo()
         configuraBotaoSalvar()
         configCameraLauncher()
         configGaleriaLauncher()
         editarFotoFerfil()
+
+        viewModel.resultadoRegistro.observe(this) { result ->
+            result.onSuccess {
+                Toast.makeText(this, "Cliente cadastrado com sucesso!", Toast.LENGTH_SHORT).show()
+                finish()
+            }.onFailure { exception ->
+                Toast.makeText(
+                    this,
+                    "Erro ao cadastrar cliente: ${exception.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
-    fun aplicaTitulo(){
+    fun aplicaTitulo() {
         title = "Dados do Cliente"
     }
 
-    // Método para exibir o DatePickerDialog
-    private fun showDatePickerDialog() {
-        val dataPicker = DataPickerFragment { selectedDate ->
-            binding.dataAtendimentoFormulario.setText(selectedDate)
-        }
-        dataPicker.show(supportFragmentManager, "dataPicker")
-    }
-
-    // Método para exibir o TimePickerDialog
-    private fun showTimePickerDialog() {
-        val timePicker = HoraPickerFragment { selectedTime ->
-            binding.horaAtendimentoFormulario.setText(selectedTime)
-        }
-        timePicker.show(supportFragmentManager, "timePicker")
-    }
+//    // Método para exibir o DatePickerDialog
+//    private fun showDatePickerDialog() {
+//        val dataPicker = DataPickerFragment { selectedDate ->
+//            binding.dataAtendimentoFormulario.setText(selectedDate)
+//        }
+//        dataPicker.show(supportFragmentManager, "dataPicker")
+//    }
+//
+//    // Método para exibir o TimePickerDialog
+//    private fun showTimePickerDialog() {
+//        val timePicker = HoraPickerFragment { selectedTime ->
+//            binding.horaAtendimentoFormulario.setText(selectedTime)
+//        }
+//        timePicker.show(supportFragmentManager, "timePicker")
+//    }
 
     private fun editarFotoFerfil() {
         val botaoEditarFoto = binding.imagemPerfil
@@ -122,22 +137,24 @@ class FormularioClienteActivity : AppCompatActivity() {
     }
 
     // Método para capturar imagem da galeria
-    private fun configGaleriaLauncher(){
-        galeriaLauncher = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            if (uri != null) {
-                val bitmap = uriParaBitmap(uri)
-                if (bitmap != null) {
-                    Log.d("FormularioClienteActivity", "Imagem selecionada: $uri")
-                    imagemPerfilBitmap = bitmap
-                    mostrarFoto(bitmap)
-                } else {
-                    Log.e("FormularioClienteActivity", "Erro ao converter URI para Bitmap")
-                }
+    private fun configGaleriaLauncher() {
+        galeriaLauncher =
+            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                if (uri != null) {
+                    val bitmap = uriParaBitmap(uri)
+                    if (bitmap != null) {
+                        Log.d("FormularioClienteActivity", "Imagem selecionada: $uri")
+                        imagemPerfilBitmap = bitmap
+                        mostrarFoto(bitmap)
+                    } else {
+                        Log.e("FormularioClienteActivity", "Erro ao converter URI para Bitmap")
+                    }
                 } else {
                     Log.e("FormularioClienteActivity", "Nenhuma imagem selecionada")
+                }
             }
-        }
     }
+
     // Método para escolher a foto
     private fun escolherFoto() {
         val opcoes = arrayOf("Camera", "Galeria")
@@ -159,17 +176,19 @@ class FormularioClienteActivity : AppCompatActivity() {
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (cameraIntent.resolveActivity(packageManager) != null) {
             cameraLauncher.launch(cameraIntent)
-        } else{
+        } else {
             Log.e("FormularioClienteActivity", "Erro ao abrir a câmera")
         }
     }
+
     // Método para escolher uma imagem da galeria
     fun escolherDaGaleria() {
         // Lógica para escolher uma imagem da galeria
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             galeriaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         } else {
-            val galeryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            val galeryIntent =
+                Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(galeryIntent, GALERIA_PERMISSION_REQUEST_CODE)
         }
     }
@@ -214,20 +233,20 @@ class FormularioClienteActivity : AppCompatActivity() {
                 binding.nomeAnimalFormulario.error = "Campo Obrigatório!"
                 return@setOnClickListener
             } else
-            if (!nomeAnimal.matches(Regex("^[a-zA-ZÀ-ÿ ]+\$"))) {
-                binding.nomeAnimalFormulario.error = "Digite apenas letras e espaços"
-                return@setOnClickListener
-            }
-            val data = binding.dataAtendimentoFormulario.text.toString().trim()
-            if (data.isEmpty()) {
-                binding.dataAtendimentoFormulario.error = "Campo Obrigatório!"
-                return@setOnClickListener
-            }
-            val hora = binding.horaAtendimentoFormulario.text.toString().trim()
-            if (hora.isEmpty()) {
-                binding.nomeAnimalFormulario.error = "Campo Obrigatório!"
-                return@setOnClickListener
-            }
+                if (!nomeAnimal.matches(Regex("^[a-zA-ZÀ-ÿ ]+\$"))) {
+                    binding.nomeAnimalFormulario.error = "Digite apenas letras e espaços"
+                    return@setOnClickListener
+                }
+//            val data = binding.dataAtendimentoFormulario.text.toString().trim()
+//            if (data.isEmpty()) {
+//                binding.dataAtendimentoFormulario.error = "Campo Obrigatório!"
+//                return@setOnClickListener
+//            }
+//            val hora = binding.horaAtendimentoFormulario.text.toString().trim()
+//            if (hora.isEmpty()) {
+//                binding.nomeAnimalFormulario.error = "Campo Obrigatório!"
+//                return@setOnClickListener
+//            }
             val tel = binding.telefoneClienteFormulario.text.toString().trim()
             if (tel.isEmpty()) {
                 binding.telefoneClienteFormulario.error = "Campo Obrigatório!"
@@ -238,66 +257,84 @@ class FormularioClienteActivity : AppCompatActivity() {
                 binding.emailClienteFormulario.error = "Campo Obrigatório!"
                 return@setOnClickListener
             }
-
-            val clienteNovo = criaCliente()
-            lifecycleScope.launch(Dispatchers.IO) {
-                clienteDao.insert(cliente = clienteNovo)
-                finish()
+            val senha = binding.senhaClienteFormulario.text.toString().trim()
+            if (senha.isEmpty()) {
+                binding.senhaClienteFormulario.error = "Campo Obrigatório!"
+                return@setOnClickListener
             }
+            imagemPerfilPath = imagemPerfilBitmap?.let { salvarImagem(it) }.toString()
+
+            viewModel.registrar(
+                nomeTutor = nomeTutor,
+                nomeAnimal = nomeAnimal,
+                telefoneTutor = tel,
+                emailTutor = email,
+                senha = senha,
+                imagemPerfil = imagemPerfilPath
+            )
+
+//            val clienteNovo = criaCliente()
+//            lifecycleScope.launch(Dispatchers.IO) {
+//                clienteDao.insert(cliente = clienteNovo)
+//                finish()
         }
     }
 
-    private fun criaCliente(): Cliente {
+
+//    private fun criaCliente(): Cliente {
+//
+//
+//        val campoNomeTutor = binding.nomeClienteFormulario.text
+//        val nomeTuotor = campoNomeTutor.toString()
+//
+//        val campoNomeAnimal = binding.nomeAnimalFormulario.text
+//        val nomeAnimal = campoNomeAnimal.toString()
+//
+//
+//        val telefoneTutor = binding.telefoneClienteFormulario.text.toString()
+//            .formataTelefone()
+//
+//        val campoEmail = binding.emailClienteFormulario.text
+//        val emailTotor = campoEmail.toString()
+//
+////        val campoObservacao = binding.observacaoClienteFormulario.text
+////        val observacaoAnimal = campoObservacao.toString()
+////
+////        val campoData = binding.dataAtendimentoFormulario.text
+////        val dataAtendimento = campoData.toString()
+////
+////        val campoHora = binding.horaAtendimentoFormulario.text
+////        val horaAtendimento = campoHora.toString()
+//
+//       imagemPerfilPath = imagemPerfilBitmap?.let { salvarImagem(it) }
+//
+//        return Cliente(
+//            nomeTutor = nomeTuotor,
+//            nomeAnimal = nomeAnimal,
+//           // dataAtendimento = dataAtendimento,
+//          //  horaAtendimento = horaAtendimento,
+//            telefoneTutor = telefoneTutor,
+//            emailTutor = emailTotor,
+//           // observacaoAnimal = observacaoAnimal,
+////            senha = "",
+//            imagemPerfil = imagemPerfilPath
+//        )
 
 
-        val campoNomeTutor = binding.nomeClienteFormulario.text
-        val nomeTuotor = campoNomeTutor.toString()
-
-        val campoNomeAnimal = binding.nomeAnimalFormulario.text
-        val nomeAnimal = campoNomeAnimal.toString()
-
-
-        val telefoneTutor = binding.telefoneClienteFormulario.text.toString()
-            .formataTelefone()
-
-        val campoEmail = binding.emailClienteFormulario.text
-        val emailTotor = campoEmail.toString()
-
-        val campoObservacao = binding.observacaoClienteFormulario.text
-        val observacaoAnimal = campoObservacao.toString()
-
-        val campoData = binding.dataAtendimentoFormulario.text
-        val dataAtendimento = campoData.toString()
-
-        val campoHora = binding.horaAtendimentoFormulario.text
-        val horaAtendimento = campoHora.toString()
-
-       imagemPerfilPath = imagemPerfilBitmap?.let { salvarImagem(it) }
-
-        return Cliente(
-            nomeTutor = nomeTuotor,
-            nomeAnimal = nomeAnimal,
-            dataAtendimento = dataAtendimento,
-            horaAtendimento = horaAtendimento,
-            telefoneTutor = telefoneTutor,
-            emailTutor = emailTotor,
-            observacaoAnimal = observacaoAnimal,
-            imagemPerfil = imagemPerfilPath
-        )
-    }
     // Método para salvar a imagem
-    private fun salvarImagem(bitmap: Bitmap): String {
-        val nomeArquivo = "imagem_perfil_${System.currentTimeMillis()}.jpg" // Nome do arquivo da imagem
+    private fun salvarImagem(bitmap: Bitmap) {
+        val nomeArquivo =
+            "imagem_perfil_${System.currentTimeMillis()}.jpg" // Nome do arquivo da imagem
         val arquivo = File(filesDir, nomeArquivo) // Caminho do arquivo da imagem
         try {
-            val stream = FileOutputStream(arquivo)
-            bitmap.compress((Bitmap.CompressFormat.JPEG), 100, stream)
-            stream.flush()
-            stream.close()
-            return arquivo.absolutePath
+            FileOutputStream(arquivo).use { stream ->
+                bitmap.compress((Bitmap.CompressFormat.JPEG), 100, stream)
+                stream.flush()
+            }
+            arquivo.absolutePath
         } catch (e: Exception) {
             e.printStackTrace()
-            return null.toString()
+            ""
         }
     }
 
@@ -307,7 +344,13 @@ class FormularioClienteActivity : AppCompatActivity() {
         permissions: Array<out String>,
         grantResults: IntArray // Array de resultados de permissões
     ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults) // Chamar o método da superclasse
+        super.onRequestPermissionsResult(
+            requestCode,
+            permissions,
+            grantResults
+        ) // Chamar o método da superclasse
         viewModel.onRequestPermissionsResult(requestCode, grantResults, this)
     }
+
 }
+

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "673061882414",
+    "project_id": "agendapet-49afa",
+    "storage_bucket": "agendapet-49afa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:673061882414:android:39b8ad625566ffcca62dbf",
+        "android_client_info": {
+          "package_name": "br.com.gallodev.agendapet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCY3s6DEpz2YFwFgqY-wdtdopqnr20S79E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

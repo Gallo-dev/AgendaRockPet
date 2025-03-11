@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.widget.SearchView.OnCloseListener
 import androidx.recyclerview.widget.RecyclerView
 import br.com.gallodev.agendapet.R
 import br.com.gallodev.agendapet.data.model.Cliente

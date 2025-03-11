@@ -2,38 +2,94 @@ package br.com.gallodev.agendapet.presentation.formularioCliente
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import br.com.gallodev.agendapet.data.model.Cliente
+import br.com.gallodev.agendapet.data.repository.Authentication
 
-class FormularioViewModel : ViewModel() {
+class FormularioViewModel(private val authentication: Authentication) : ViewModel() {
+
+    private val _resultadoRegistro = MutableLiveData<Result<Boolean>>()
+    val resultadoRegistro: LiveData<Result<Boolean>> get() = _resultadoRegistro
+
+    fun registrar(
+        nomeTutor: String,
+        nomeAnimal: String,
+        telefoneTutor: String,
+        emailTutor: String,
+        imagemPerfil: String?,
+        senha: String
+    ) {
+        val clinete = Cliente(
+            nomeTutor = nomeTutor,
+            nomeAnimal = nomeAnimal,
+            telefoneTutor = telefoneTutor,
+            emailTutor = emailTutor,
+            senha = senha,
+            imagemPerfil = imagemPerfil
+        )
+        authentication.register(emailTutor, senha, clinete) { sucesso, erro ->
+            if (sucesso) {
+                _resultadoRegistro.postValue(Result.success(true))
+            } else {
+                _resultadoRegistro.postValue(Result.failure(Exception(erro)))
+            }
+        }
+    }
+
     companion object {
         private const val CAMERA_PERMISSION_REQUEST_CODE = 100
         private const val GALERIA_PERMISSION_REQUEST_CODE = 101
     }
 
     fun verificarPermissaoCamera(activity: FormularioClienteActivity) {
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             activity.tirarFoto()
         } else {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CAMERA)) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    activity,
+                    Manifest.permission.CAMERA
+                )
+            ) {
                 mostrarDialogoExplicativoCamera(activity)
             } else {
-                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
+                ActivityCompat.requestPermissions(
+                    activity,
+                    arrayOf(Manifest.permission.CAMERA),
+                    CAMERA_PERMISSION_REQUEST_CODE
+                )
             }
         }
     }
 
     fun verificarPermissaoGaleria(activity: FormularioClienteActivity) {
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.READ_MEDIA_IMAGES
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             activity.escolherDaGaleria()
         } else {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_MEDIA_IMAGES)) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    activity,
+                    Manifest.permission.READ_MEDIA_IMAGES
+                )
+            ) {
                 mostrarDialogoExplicativoGaleria(activity)
             } else {
-                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_MEDIA_IMAGES), GALERIA_PERMISSION_REQUEST_CODE)
+                ActivityCompat.requestPermissions(
+                    activity,
+                    arrayOf(Manifest.permission.READ_MEDIA_IMAGES),
+                    GALERIA_PERMISSION_REQUEST_CODE
+                )
             }
         }
     }
@@ -43,7 +99,11 @@ class FormularioViewModel : ViewModel() {
             .setTitle("Permissão para Câmera")
             .setMessage("Precisamos da permissão para acessar a câmera para que você possa tirar fotos.")
             .setPositiveButton("Ok") { _, _ ->
-                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
+                ActivityCompat.requestPermissions(
+                    activity,
+                    arrayOf(Manifest.permission.CAMERA),
+                    CAMERA_PERMISSION_REQUEST_CODE
+                )
             }
             .setNegativeButton("Cancelar") { dialog, _ ->
                 dialog.dismiss()
@@ -56,7 +116,11 @@ class FormularioViewModel : ViewModel() {
             .setTitle("Permissão para Galeria")
             .setMessage("Precisamos da permissão para acessar a galeria para que você possa escolher fotos.")
             .setPositiveButton("Ok") { _, _ ->
-                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_MEDIA_IMAGES), GALERIA_PERMISSION_REQUEST_CODE)
+                ActivityCompat.requestPermissions(
+                    activity,
+                    arrayOf(Manifest.permission.READ_MEDIA_IMAGES),
+                    GALERIA_PERMISSION_REQUEST_CODE
+                )
             }
             .setNegativeButton("Cancelar") { dialog, _ ->
                 dialog.dismiss()
@@ -76,6 +140,7 @@ class FormularioViewModel : ViewModel() {
                     activity.tirarFoto()
                 }
             }
+
             GALERIA_PERMISSION_REQUEST_CODE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     activity.escolherDaGaleria()
@@ -83,6 +148,8 @@ class FormularioViewModel : ViewModel() {
             }
         }
     }
+
+
 
 //    fun verificarPermissaoCamera(activity: FormularioClienteActivity) {
 //        Log.i("FormularioViewModel", "verificarPermissaoCamera chamado")

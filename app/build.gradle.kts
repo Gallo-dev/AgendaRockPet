@@ -7,6 +7,8 @@ plugins {
 
     // id("com.google.devtools.ksp") alternativa para o kapt
     id("com.google.devtools.ksp")
+    // plugin do Firebase
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -55,6 +57,10 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.material3.android)
     implementation(libs.androidx.compose.material.core)
+    implementation(libs.firebase.common.ktx)
+    implementation(libs.mediation.test.suite)
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.auth.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -80,4 +86,7 @@ dependencies {
 
     // Dependencia do LyafeCycle coroutine para o Room
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+
+    // Dependencia para o DataStore (Armazenamento de dados) Firebase
+    implementation(libs.firebase.bom)
 }
