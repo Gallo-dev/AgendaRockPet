@@ -1,5 +1,6 @@
 package br.com.gallodev.agendapet.data.repository
 
+import android.util.Log
 import br.com.gallodev.agendapet.data.model.Cliente
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -7,8 +8,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 class Authentication {
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    fun login(email: String, password: String, calback: (Boolean, String?) -> Unit) {
-        firebaseAuth.signInWithEmailAndPassword(email, password)
+    fun login(email: String, senha: String, calback: (Boolean, String?) -> Unit) {
+        firebaseAuth.signInWithEmailAndPassword(email, senha)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     calback(true, null)
@@ -20,19 +21,22 @@ class Authentication {
 
     fun register(
         email: String,
-        password: String,
+        senha: String,
         cliente: Cliente,
         calback: (Boolean, String?) -> Unit
-    ) {
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
+    )  {
+        firebaseAuth.createUserWithEmailAndPassword(email, senha)
+            .addOnCompleteListener { cadastro ->
+                Log.d("Authentication", "task: $cadastro")
+                if (cadastro.isSuccessful) {
                     // obtein o id do usuario e retorna uma string vazia se for nulo
                     val uid = firebaseAuth.currentUser?.uid?: ""
+                    Log.d("Authentication", "uid: $uid")
                     // obtein a instância do Firestore e salve os dados do cliente
                     val db = FirebaseFirestore.getInstance()
                     db.collection("clientes").document(uid).set(cliente)
                         .addOnCompleteListener { docTask ->
+                            Log.d("Authentication", "docTask: $docTask")
                             if (docTask.isSuccessful) {
                                 calback(true, null)
                             } else {
@@ -40,7 +44,7 @@ class Authentication {
                             }
                         }
                 }else {
-                    calback(false, task.exception?.message)
+                    calback(false, cadastro.exception?.message)
                 }
             }
     }

@@ -1,5 +1,6 @@
 package br.com.gallodev.agendapet.presentation.Login
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,9 +15,11 @@ class LoginViewModel(private val authentication: Authentication) : ViewModel() {
         authentication.login(email, password) { success, error ->
             if (success) {
                 _loginResult.postValue(Result.success(true))
+                Log.d("LoginViewModel", "Login bem-sucedido")
             } else {
                 val errorMessage = error ?: "Erro desconhecido"
                 _loginResult.postValue(Result.failure(Exception(errorMessage)))
+                Log.d("LoginViewModel", "Erro ao fazer login: $errorMessage")
             }
         }
     }

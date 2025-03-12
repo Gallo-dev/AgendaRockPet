@@ -11,6 +11,7 @@
     <string name="hora">Hora (hh:mm)"</string>
     <string name="senha">Senha"</string>
     <string name="entrar">Entrar"</string>
+    <string name="redefinir_senha">Esqueci a Senha"</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_data_fragment">Hello data fragment</string>
     <!-- TODO: Remove or change this placeholder text -->

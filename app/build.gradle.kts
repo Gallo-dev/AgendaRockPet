@@ -58,7 +58,7 @@ dependencies {
     implementation(libs.androidx.material3.android)
     implementation(libs.androidx.compose.material.core)
     implementation(libs.firebase.common.ktx)
-    implementation(libs.mediation.test.suite)
+//    implementation(libs.mediation.test.suite)
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.firebase.auth.ktx)
     testImplementation(libs.junit)
@@ -80,7 +80,6 @@ dependencies {
 
     // Dependencia para o Room
     implementation("androidx.room:room-runtime:2.6.1")
-    annotationProcessor("androidx.room:room-compiler:2.6.1")
     ksp("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
 

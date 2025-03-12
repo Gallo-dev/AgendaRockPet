@@ -8,8 +8,11 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.util.Log
+import android.util.Patterns
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -19,13 +22,17 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.viewModelFactory
 import br.com.gallodev.agendapet.R
 import br.com.gallodev.agendapet.data.AppDataBase.AppDatabase
 import br.com.gallodev.agendapet.data.AppDataBase.ClienteDao
 import br.com.gallodev.agendapet.data.model.Cliente
+import br.com.gallodev.agendapet.data.repository.Authentication
 import br.com.gallodev.agendapet.databinding.ActivityFormularioClienteBinding
 import br.com.gallodev.agendapet.presentation.ListCliente.DataPickerFragment
 import br.com.gallodev.agendapet.presentation.ListCliente.HoraPickerFragment
+import br.com.gallodev.agendapet.presentation.ListCliente.ListaClientesActivity
+import br.com.gallodev.agendapet.presentation.Login.LoginActivity
 import br.com.gallodev.agendapet.utils.aplicaMascaraData
 import br.com.gallodev.agendapet.utils.aplicaMascaraHora
 import br.com.gallodev.agendapet.utils.aplicaMascaraTel
@@ -60,7 +67,8 @@ class FormularioClienteActivity : AppCompatActivity() {
 
         //clienteDao = AppDatabase.getDatabase(this).clienteDao()
 
-        viewModel = ViewModelProvider(this)[FormularioViewModel::class.java]
+        val viewModelFactory = FormularioViewModelFactory(Authentication())
+        viewModel = ViewModelProvider(this, viewModelFactory)[FormularioViewModel::class.java]
 
 //        binding.dataAtendimentoFormulario.setOnClickListener {
 //            showDatePickerDialog()
@@ -79,18 +87,6 @@ class FormularioClienteActivity : AppCompatActivity() {
         configGaleriaLauncher()
         editarFotoFerfil()
 
-        viewModel.resultadoRegistro.observe(this) { result ->
-            result.onSuccess {
-                Toast.makeText(this, "Cliente cadastrado com sucesso!", Toast.LENGTH_SHORT).show()
-                finish()
-            }.onFailure { exception ->
-                Toast.makeText(
-                    this,
-                    "Erro ao cadastrar cliente: ${exception.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
     }
 
     fun aplicaTitulo() {
@@ -217,110 +213,6 @@ class FormularioClienteActivity : AppCompatActivity() {
         }
     }
 
-    private fun configuraBotaoSalvar() {
-        val botaoSalvar = binding.botaoSalvarFormulario
-        botaoSalvar.setOnClickListener {
-            val nomeTutor = binding.nomeClienteFormulario.text.toString().trim()
-            if (nomeTutor.isEmpty()) {
-                binding.nomeClienteFormulario.error = "Campo Obrigatório!"
-                return@setOnClickListener
-            } else if (!nomeTutor.matches(Regex("^[a-zA-ZÀ-ÿ ]+\$"))) {
-                binding.nomeClienteFormulario.error = "Digite apenas letras e espaços"
-                return@setOnClickListener
-            }
-            val nomeAnimal = binding.nomeAnimalFormulario.text.toString().trim()
-            if (nomeAnimal.isEmpty()) {
-                binding.nomeAnimalFormulario.error = "Campo Obrigatório!"
-                return@setOnClickListener
-            } else
-                if (!nomeAnimal.matches(Regex("^[a-zA-ZÀ-ÿ ]+\$"))) {
-                    binding.nomeAnimalFormulario.error = "Digite apenas letras e espaços"
-                    return@setOnClickListener
-                }
-//            val data = binding.dataAtendimentoFormulario.text.toString().trim()
-//            if (data.isEmpty()) {
-//                binding.dataAtendimentoFormulario.error = "Campo Obrigatório!"
-//                return@setOnClickListener
-//            }
-//            val hora = binding.horaAtendimentoFormulario.text.toString().trim()
-//            if (hora.isEmpty()) {
-//                binding.nomeAnimalFormulario.error = "Campo Obrigatório!"
-//                return@setOnClickListener
-//            }
-            val tel = binding.telefoneClienteFormulario.text.toString().trim()
-            if (tel.isEmpty()) {
-                binding.telefoneClienteFormulario.error = "Campo Obrigatório!"
-                return@setOnClickListener
-            }
-            val email = binding.emailClienteFormulario.text.toString().trim()
-            if (email.isEmpty()) {
-                binding.emailClienteFormulario.error = "Campo Obrigatório!"
-                return@setOnClickListener
-            }
-            val senha = binding.senhaClienteFormulario.text.toString().trim()
-            if (senha.isEmpty()) {
-                binding.senhaClienteFormulario.error = "Campo Obrigatório!"
-                return@setOnClickListener
-            }
-            imagemPerfilPath = imagemPerfilBitmap?.let { salvarImagem(it) }.toString()
-
-            viewModel.registrar(
-                nomeTutor = nomeTutor,
-                nomeAnimal = nomeAnimal,
-                telefoneTutor = tel,
-                emailTutor = email,
-                senha = senha,
-                imagemPerfil = imagemPerfilPath
-            )
-
-//            val clienteNovo = criaCliente()
-//            lifecycleScope.launch(Dispatchers.IO) {
-//                clienteDao.insert(cliente = clienteNovo)
-//                finish()
-        }
-    }
-
-
-//    private fun criaCliente(): Cliente {
-//
-//
-//        val campoNomeTutor = binding.nomeClienteFormulario.text
-//        val nomeTuotor = campoNomeTutor.toString()
-//
-//        val campoNomeAnimal = binding.nomeAnimalFormulario.text
-//        val nomeAnimal = campoNomeAnimal.toString()
-//
-//
-//        val telefoneTutor = binding.telefoneClienteFormulario.text.toString()
-//            .formataTelefone()
-//
-//        val campoEmail = binding.emailClienteFormulario.text
-//        val emailTotor = campoEmail.toString()
-//
-////        val campoObservacao = binding.observacaoClienteFormulario.text
-////        val observacaoAnimal = campoObservacao.toString()
-////
-////        val campoData = binding.dataAtendimentoFormulario.text
-////        val dataAtendimento = campoData.toString()
-////
-////        val campoHora = binding.horaAtendimentoFormulario.text
-////        val horaAtendimento = campoHora.toString()
-//
-//       imagemPerfilPath = imagemPerfilBitmap?.let { salvarImagem(it) }
-//
-//        return Cliente(
-//            nomeTutor = nomeTuotor,
-//            nomeAnimal = nomeAnimal,
-//           // dataAtendimento = dataAtendimento,
-//          //  horaAtendimento = horaAtendimento,
-//            telefoneTutor = telefoneTutor,
-//            emailTutor = emailTotor,
-//           // observacaoAnimal = observacaoAnimal,
-////            senha = "",
-//            imagemPerfil = imagemPerfilPath
-//        )
-
-
     // Método para salvar a imagem
     private fun salvarImagem(bitmap: Bitmap) {
         val nomeArquivo =
@@ -352,5 +244,76 @@ class FormularioClienteActivity : AppCompatActivity() {
         viewModel.onRequestPermissionsResult(requestCode, grantResults, this)
     }
 
+    private fun configuraBotaoSalvar() {
+        val botaoSalvar = binding.botaoSalvarFormulario
+        botaoSalvar.setOnClickListener {
+            val nomeTutor = binding.nomeClienteFormulario.text.toString().trim()
+            if (nomeTutor.isEmpty()) {
+                binding.nomeClienteFormulario.error = "Campo Obrigatório!"
+                return@setOnClickListener
+            } else if (!nomeTutor.matches(Regex("^[a-zA-ZÀ-ÿ ]+\$"))) {
+                binding.nomeClienteFormulario.error = "Digite apenas letras e espaços"
+                return@setOnClickListener
+            }
+            val nomeAnimal = binding.nomeAnimalFormulario.text.toString().trim()
+            if (nomeAnimal.isEmpty()) {
+                binding.nomeAnimalFormulario.error = "Campo Obrigatório!"
+                return@setOnClickListener
+            } else
+                if (!nomeAnimal.matches(Regex("^[a-zA-ZÀ-ÿ ]+\$"))) {
+                    binding.nomeAnimalFormulario.error = "Digite apenas letras e espaços"
+                    return@setOnClickListener
+                }
+//
+            val tel = binding.telefoneClienteFormulario.text.toString().trim()
+            if (tel.isEmpty()) {
+                binding.telefoneClienteFormulario.error = "Campo Obrigatório!"
+                return@setOnClickListener
+            }
+
+            val email = binding.emailClienteFormulario.text.toString().trim()
+            if (email.isEmpty()) {
+                binding.emailClienteFormulario.error = "Campo Obrigatório!"
+                return@setOnClickListener
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                binding.emailClienteFormulario.error = "Digite um e-mail válido"
+                return@setOnClickListener
+            }
+
+            val senha = binding.senhaClienteFormulario.text.toString().trim()
+            if (senha.isEmpty()) {
+                binding.senhaClienteFormulario.error = "Campo Obrigatório!"
+                return@setOnClickListener
+            } else if (senha.length < 6) {
+                binding.senhaClienteFormulario.error = "Senha de no mínimo 6 caracteres"
+                return@setOnClickListener
+            }
+            imagemPerfilPath = imagemPerfilBitmap?.let { salvarImagem(it) }.toString()
+
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+            Toast.makeText(this, "Cliente cadastrado com sucesso!", Toast.LENGTH_SHORT).show()
+
+            viewModel.registrar(
+                nomeTutor = nomeTutor,
+                nomeAnimal = nomeAnimal,
+                telefoneTutor = tel,
+                emailTutor = email,
+                senha = senha,
+                imagemPerfil = imagemPerfilPath
+            )
+        }
+
+        viewModel.resultadoRegistro.observe(this) { result ->
+            result.onFailure { exception ->
+                Toast.makeText(
+                    this,
+                    "Cliente ou e-mail ja cadastrado",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
 }
 

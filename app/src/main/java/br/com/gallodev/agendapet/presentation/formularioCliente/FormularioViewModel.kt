@@ -2,12 +2,15 @@ package br.com.gallodev.agendapet.presentation.formularioCliente
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import br.com.gallodev.agendapet.data.model.Cliente
 import br.com.gallodev.agendapet.data.repository.Authentication
 
@@ -33,10 +36,13 @@ class FormularioViewModel(private val authentication: Authentication) : ViewMode
             imagemPerfil = imagemPerfil
         )
         authentication.register(emailTutor, senha, clinete) { sucesso, erro ->
+            Log.d("FormularioViewModel", "sucesso: $sucesso, erro: $erro")
             if (sucesso) {
                 _resultadoRegistro.postValue(Result.success(true))
+                Log.d("FormularioViewModel", "sucesso: $sucesso")
             } else {
                 _resultadoRegistro.postValue(Result.failure(Exception(erro)))
+                Log.d("FormularioViewModel", "erro: $erro")
             }
         }
     }
@@ -202,3 +208,14 @@ class FormularioViewModel(private val authentication: Authentication) : ViewMode
 //
 //    }
 }
+class FormularioViewModelFactory(private val authentication: Authentication) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(FormularioViewModel::class.java)) {
+            return FormularioViewModel(authentication) as T
+            Log.d("FormularioViewModelFactory", "create: $modelClass")
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+        Log.d("FormularioViewModelFactory", "create: $modelClass")
+    }
+}
+
